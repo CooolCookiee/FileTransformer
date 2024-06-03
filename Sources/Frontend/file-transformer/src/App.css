@@ -1,7 +1,8 @@
 .App {
-  text-align: center;
-  background-color: white;
-  font-family: sans-serif;
+  background-color: #1f2937;
+  font-family: var(--font-inter), sans-serif;
+  height: 100vh;
+  width: 100vw;
 }
 
 .App-logo {
@@ -41,16 +42,26 @@
 
 .container {
   display: flex;
-  flex-direction: column;
+  color: white;
+  flex-direction: row; /* Change to row */
   gap: 20px;
   padding: 20px;
-  border: 2px solid black;
-  border-radius: 8px;
-  background-color: white;
-  font-family: 'Arial', sans-serif;
   width: 75%;
   margin: 2rem auto;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.container-left{
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.container-right{
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .file-input {
@@ -59,14 +70,16 @@
   gap: 5px;
 }
 
-.file-input label {
-  font-weight: bold;
-}
-
 .file-input input[type="file"] {
   padding: 10px;
-  border: 2px solid black;
   border-radius: 5px;
+}
+
+.file-input label {
+  padding: 7px 0px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
 }
 
 .settings {
@@ -76,17 +89,23 @@
 }
 
 .settings label {
-  font-weight: bold;
+  padding: 4px 0px;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;  
 }
 
 .settings input[type="text"] {
-  padding: 10px;
-  border: 2px solid black;
+  padding: 10px 20px;
   border-radius: 5px;
+  background-color: #374151;
+  border: 2px outset transparent;
+  color: white;
+  font-weight: bold;
 }
 
+
 .file-display {
-  border: 2px solid black;
   border-radius: 5px;
   overflow: auto;
 }
@@ -103,7 +122,6 @@ button {
   background-color: white;
   color: black;
   padding: 12px 20px;
-  border: 2px solid black;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
@@ -111,15 +129,15 @@ button {
 }
 
 button:hover {
-  background-color: lightgreen;
+  background-color: black;
 }
 
 .custom-file-button {
-  background-color: white;
-  color: black;
+  background-color: #374151;
+  color: white;
   padding: 10px 20px;
-  border: 2px solid black;
   border-radius: 5px;
+  border: 2px outset transparent;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
 }

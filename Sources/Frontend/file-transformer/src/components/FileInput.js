@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-function FileInput({ label, onFileChange, file, setFile, setInputText, onFileRemove }) {
+function FileInput({ label, onFileChange, file, setFile}) {
     const inputRef = useRef(null);
 
     const handleClick = () => {
@@ -28,7 +28,7 @@ function FileInput({ label, onFileChange, file, setFile, setInputText, onFileRem
         ref={inputRef}
         style={{ display: 'none' }}
       />
-      {file && <p>Archivo seleccionado: {file.name}</p>}
+      {file && <p>Archivo seleccionado {file.name}</p>}
       <button onClick={handleClick} className={`custom-file-button ${file ? 'remove-button' : ''}`}>
         {file ? 'Quitar archivo' : 'Seleccionar archivo'}
       </button>
