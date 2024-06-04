@@ -1,8 +1,5 @@
 .App {
-  background-color: #1f2937;
   font-family: var(--font-inter), sans-serif;
-  height: 100vh;
-  width: 100vw;
 }
 
 .App-logo {
@@ -43,7 +40,7 @@
 .container {
   display: flex;
   color: white;
-  flex-direction: row; /* Change to row */
+  flex-direction: row;
   gap: 20px;
   padding: 20px;
   width: 75%;
@@ -169,28 +166,27 @@ button:hover {
 }
 
 .convert-button.loading {
-  /* Estilos para el botón en estado de carga */
-  background-color: lightgray; /* Color de fondo inicial */
+  background-color: lightgray;
   background-image: linear-gradient(to right, green 0%, green var(--progress), lightgray var(--progress), lightgray 100%);
-  background-size: 100% 100%; /* El gradiente ocupa todo el botón */
-  --progress: 0%; /* Valor inicial del progreso */
-  transition: background-color 0.3s ease; /* Transición suave */
+  background-size: 100% 100%;
+  --progress: 0%;
+  transition: background-color 0.3s ease;
 }
 
 @keyframes loading-animation {
   to {
-    background-position: right; /* Posición final del gradiente */
+    background-position: right;
   }
 }
 
 .button-group {
   display: flex;
-  flex-direction: column; /* Organiza los botones en columna */
-  gap: 10px; /* Espacio entre los botones */
+  flex-direction: column;
+  gap: 10px;
 }
 
 .delete-button {
-  background-color: red; /* Fondo rojo */
+  background-color: red;
   color: white;
   padding: 10px 20px;
   border: 2px solid black;
@@ -206,17 +202,28 @@ button:hover {
 }
 
 .save-button {
-  background-color: #4CAF50; /* Verde */
+  background-color: #4CAF50;
   color: white;
   padding: 10px 20px;
   border: 2px solid black;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Transición suave al cambiar el color de fondo */
+  transition: background-color 0.3s ease;
 }
 
 .save-button:hover {
   background-color: white;
-  color: #4CAF50; /* Verde */
+  color: #4CAF50;
   border: 2px solid #4CAF50;
+}
+
+@media (max-width: 768px) {
+
+  .container {
+    flex-direction: column;
+  }
+  .container-left,
+  .container-right {
+    width: 100%;
+  }
 }

@@ -27,13 +27,18 @@ function App() {
   };
 
   const handleSave = () => {
+    const fileExtension = inputFilePath.name.split('.').pop().toLowerCase();
+    const downloadType = fileExtension === 'txt' ? 'application/json' : 'text/plain';
+    const downloadExtension = fileExtension === 'txt' ? 'json' : 'txt';
+  
     const element = document.createElement("a");
-    const file = new Blob([outputText], { type: "text/plain" });
-    element.href = URL.createObjectURL(file);const now = new Date();
+    const file = new Blob([outputText], { type: downloadType });
+    element.href = URL.createObjectURL(file);
+    const now = new Date();
     const formattedDate = `${now.getFullYear()}-${(now.getMonth() + 1)
       .toString()
       .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
-    const filename = `converted_${formattedDate}.txt`;
+    const filename = `converted_${formattedDate}.${downloadExtension}`;
     element.download = filename;
     document.body.appendChild(element);
     element.click();
@@ -74,26 +79,25 @@ function App() {
       alert('Por favor, completa todos los campos antes de convertir.');
       return; // Detener la conversión si faltan campos
     }
-
     setIsLoading(true);
     setProgress(0);
-
+  
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
         if (prevProgress >= 100) {
           clearInterval(interval);
-          // Simulación de conversión (reemplazar con la lógica real del backend)
-          const simulatedOutput = `Conversión exitosa:\n\nEntrada:\n${inputText}\n\nSalida:\nJSON simulado`;
+          const fileExtension = inputFilePath.name.split('.').pop().toLowerCase();
+          const simulatedOutput = `Conversión exitosa:\n\nEntrada:\n${inputText}\n\nSalida:\nJSON simulado (extensión: .${fileExtension === 'txt' ? 'json' : 'txt'})`;
           setOutputText(simulatedOutput);
           setShowSaveButton(true);
           setIsLoading(false);
           return 100;
         }
-        document.documentElement.style.setProperty('--progress', `${prevProgress}%`); // Actualizar la variable CSS
-        return prevProgress + 10; // Incrementa el progreso en 10 cada intervalo
+        document.documentElement.style.setProperty('--progress', `${prevProgress}%`);
+        return prevProgress + 10;
       });
-    }, 200); // Intervalo de 200ms (ajusta según la duración deseada)
-  };
+    }, 200);
+  };  
 
   return (
     <div className="App">
@@ -106,6 +110,7 @@ function App() {
             file={inputFilePath}
             setFile={setInputFilePath}
             onFileRemove={handleFileRemove}
+            acceptedExtensions={['txt','json']}
           />
           <label>Contenido de la fuente</label>
           <FileDisplay text={inputText} />

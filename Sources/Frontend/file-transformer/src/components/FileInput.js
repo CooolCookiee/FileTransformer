@@ -1,24 +1,31 @@
 import React, { useRef } from 'react';
 
-function FileInput({ label, onFileChange, file, setFile}) {
-    const inputRef = useRef(null);
+function FileInput({ label, onFileChange, file, setFile, onFileRemove, acceptedExtensions }) {
+  const inputRef = useRef(null);
 
-    const handleClick = () => {
-      if (file) {
-        setFile(null);
-        onFileChange(null); // Limpiar el inputText al quitar el archivo
-        inputRef.current.value = null;
-      } else {
-        inputRef.current.click();
-      }
-    };
-  
-    const handleChange = (event) => {
-      const selectedFile = event.target.files[0];
+  const handleClick = () => {
+    if (file) {
+      setFile(null);
+      onFileChange(null);
+      inputRef.current.value = null;
+    } else {
+      inputRef.current.click();
+    }
+  };
+
+  const handleChange = (event) => {
+    const selectedFile = event.target.files[0];
+    const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
+
+    if (acceptedExtensions.includes(fileExtension)) {
       setFile(selectedFile);
-      onFileChange(selectedFile); // Pasar el archivo seleccionado al componente padre
-    };
-
+      onFileChange(selectedFile);
+    } else {
+      alert(`Tipo de archivo no válido. Por favor, selecciona un archivo ${acceptedExtensions.join(' o ')}.`);
+      event.target.value = null; // Limpiar el input
+    }
+  };
+  
   return (
     <div className="file-input">
       <label>{label}</label>
