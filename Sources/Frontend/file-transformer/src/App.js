@@ -13,6 +13,8 @@ function App() {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [showSaveButton, setShowSaveButton] = useState(false);
+  const [formattedDate, setFormattedDate] = useState('');
+  const [filename, setFilename] = useState('');
 
   const handleInputChange = (file) => {
     if (file) {
@@ -27,37 +29,17 @@ function App() {
   };
 
   const handleSave = () => {
-    const fileExtension = inputFilePath.name.split('.').pop().toLowerCase();
-    const downloadType = fileExtension === 'txt' ? 'application/json' : 'text/plain';
-    const downloadExtension = fileExtension === 'txt' ? 'json' : 'txt';
-  
     const element = document.createElement("a");
-    const file = new Blob([outputText], { type: downloadType });
+    const file = new Blob([outputText], { type: "text/plain" });
     element.href = URL.createObjectURL(file);
-    const now = new Date();
-    const formattedDate = `${now.getFullYear()}-${(now.getMonth() + 1)
-      .toString()
-      .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
-    const filename = `converted_${formattedDate}.${downloadExtension}`;
     element.download = filename;
     document.body.appendChild(element);
     element.click();
-
-    setInputFilePath(null);
-    setDelimiter(',');
-    setEncryptionKey('');
-    setInputText('');
-    setOutputText('');
-    setShowSaveButton(false); 
-  };
+    window.location.reload();
+};
 
   const handleDelete = () => {
-    setInputFilePath(null);
-    setDelimiter(',');
-    setEncryptionKey('');
-    setInputText('');
-    setOutputText('');
-    setShowSaveButton(false);
+    window.location.reload();
   };
 
   const handleFileRemove = () => {
@@ -68,36 +50,67 @@ function App() {
   useEffect(() => {
     if (inputFilePath && outputText) {
       setShowSaveButton(true);
+      const now = new Date();
+      const newFormattedDate = `${now.getFullYear()}-${(now.getMonth() + 1)
+        .toString()
+        .padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
+      const fileExtension = inputFilePath.name.split('.').pop().toLowerCase();
+      const newFilename = `converted_${newFormattedDate}.${fileExtension === 'txt' ? 'json' : 'txt'}`;
+      setFormattedDate(newFormattedDate);
+      setFilename(newFilename);
     } else {
       setShowSaveButton(false);
     }
   }, [inputFilePath, outputText]);
 
-  const handleConvert = () => {
+  const handleConvert = async () => {
     // Validar si los campos están llenos
     if (!inputFilePath || !delimiter || !encryptionKey) {
       alert('Por favor, completa todos los campos antes de convertir.');
-      return; // Detener la conversión si faltan campos
+      return;
     }
+
     setIsLoading(true);
-    setProgress(0);
-  
-    const interval = setInterval(() => {
-      setProgress((prevProgress) => {
-        if (prevProgress >= 100) {
-          clearInterval(interval);
-          const fileExtension = inputFilePath.name.split('.').pop().toLowerCase();
-          const simulatedOutput = `Conversión exitosa:\n\nEntrada:\n${inputText}\n\nSalida:\nJSON simulado (extensión: .${fileExtension === 'txt' ? 'json' : 'txt'})`;
-          setOutputText(simulatedOutput);
-          setShowSaveButton(true);
-          setIsLoading(false);
-          return 100;
-        }
-        document.documentElement.style.setProperty('--progress', `${prevProgress}%`);
-        return prevProgress + 10;
+
+    const apiUrl = 'http://localhost:4000/ari';
+    const endpoint = inputFilePath.name.endsWith('.txt') ? 'txtToJson' : 'jsonToTxt';
+
+    try {
+      const response = await fetch(`${apiUrl}/${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          secret: encryptionKey,
+          txtcontent: endpoint === 'txtToJson' ? inputText : undefined,
+          parsedData: endpoint === 'jsonToTxt' ? JSON.parse(inputText) : undefined,
+          delimiter,
+        }),
       });
-    }, 200);
-  };  
+
+      if (response.ok) {
+        const data = await response.json();
+
+        // Manejar la respuesta según el tipo de conversión
+        if (endpoint === 'txtToJson') {
+          setOutputText(JSON.stringify(data.parsedData, null, 2)); // Formatear JSON
+        } else if (endpoint === 'jsonToTxt') {
+          setOutputText(data.output); 
+        }
+
+        setShowSaveButton(true);
+      } else {
+        const errorData = await response.json();
+        setOutputText(`Error en la conversión: ${errorData.msg}`);
+      }
+    } catch (error) {
+      setOutputText('Error en la conexión con el servidor');
+      console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="App">

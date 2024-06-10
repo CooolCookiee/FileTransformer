@@ -5,9 +5,7 @@ function FileInput({ label, onFileChange, file, setFile, onFileRemove, acceptedE
 
   const handleClick = () => {
     if (file) {
-      setFile(null);
-      onFileChange(null);
-      inputRef.current.value = null;
+      window.location.reload();
     } else {
       inputRef.current.click();
     }
