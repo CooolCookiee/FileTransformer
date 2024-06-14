@@ -22,7 +22,7 @@ Para ejecutar el programa, usa el siguiente comando:
 Paso 3: Instalación de dependencias en el Frontend
 Navega hasta el directorio del proyecto clonado usando el comando cd:
 
- 	cd ..
+  cd ..
   cd Frontend
   cd file-transfomer
   
