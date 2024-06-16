@@ -59,7 +59,7 @@ const txtToJson = async (req, res = response) => {
     console.log(err);
     res.status(500).json({
       ok: false,
-      msg: "Please contact the administrator",
+      msg: "Something went wrong :(",
     });
   }
 };
@@ -92,7 +92,7 @@ const jsonToTxt = async (req, res = response) => {
     console.log(err);
     res.status(500).json({
       ok: false,
-      msg: "Please contact the administrator",
+      msg: "Something went wrong :(",
     });
   }
 };
