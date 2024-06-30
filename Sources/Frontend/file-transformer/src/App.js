@@ -92,11 +92,10 @@ function App() {
       if (response.ok) {
         const data = await response.json();
 
-        // Manejar la respuesta según el tipo de conversión
-        if (endpoint === 'txtToJson') {
-          setOutputText(JSON.stringify(data.parsedData, null, 2)); // Formatear JSON
-        } else if (endpoint === 'jsonToTxt') {
-          setOutputText(data.output); 
+        if (endpoint === 'txtToJson') { // Si se convierte de txt a json
+          setOutputText(JSON.stringify(data.parsedData, null, 2));  // Formatear el JSON
+        } else if (endpoint === 'jsonToTxt') {  // Si se convierte de json a txt
+          setOutputText(data.output);  // Mostrar la salida
         }
 
         setShowSaveButton(true);
